@@ -30,7 +30,7 @@ body {
 
 .top {
     height: 40vh;
-    background-image: linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.35)), url(back.png);
+    background-image: linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.35)), url("https://www.desktopbackground.org/p/2013/04/07/557283_hd-best-green-autumn-leaves-background-wallpapers-full-size_2560x1600_h.jpg");
     background-size: cover;
     background-position: center;
     position: relative;
@@ -68,11 +68,23 @@ body {
 
 .budget_income {
     margin-bottom: 10px;
-    background-color: #28B9B5;
+    background-color:rgba(6, 250, 67, 0.9) ;
+    border-radius: 5px;
+}
+.budget_income:hover{
+    background-color:rgba(6, 250, 67, 1) ;
+    transform : scale(1.1);
 }
 
 .budget_expenses {
-    background-color: #FF5049;
+    background-color: rgba(255, 0, 0, 0.95);
+    border-radius: 5px;
+        
+    
+}
+.budget_expenses:hover {
+    transform: scale(1.1);
+    background-color: rgba(253, 13, 5,1); 
 }
 
 .budget_income--text,
