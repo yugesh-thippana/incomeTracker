@@ -30,7 +30,7 @@ body {
 
 .top {
     height: 40vh;
-    background-image: linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.35)), url("https://www.desktopbackground.org/p/2013/04/07/557283_hd-best-green-autumn-leaves-background-wallpapers-full-size_2560x1600_h.jpg");
+    background-image: url("https://miro.medium.com/max/3408/1*_q0eVHdpPEsFEZ7sA-mciA.png");
     background-size: cover;
     background-position: center;
     position: relative;
@@ -43,6 +43,18 @@ body {
     left: 50%;
     transform: translate(-50%, -50%);
     color: #fff;
+    height : 100%;
+    padding : auto;
+    display : flex;
+    flex-direction : column;
+    justify-content: space-around;
+    background-color: rgba(255, 255, 255, 0.2);
+}
+.budget:hover  .budget_title{
+    color : black;
+}
+.budget_mini {
+    height : 75%;
 }
 
 .budget_title {
@@ -58,7 +70,22 @@ body {
     text-align: center;
     margin-bottom: 25px;
     letter-spacing: 2px;
+    animation : budget_value 1s infinite ;
 }
+
+@keyframes budget_value {
+    0%{
+        color : green;
+    }
+    50%{
+        color : red;
+    }
+    100%{
+        color : blue;
+    }
+
+}
+
 
 .budget_income,
 .budget_expenses {
