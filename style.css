@@ -77,11 +77,14 @@ body {
     0%{
         color : green;
     }
-    50%{
+    33%{
         color : red;
     }
-    100%{
+    66%{
         color : blue;
+    }
+    100%{
+        color : green;
     }
 
 }
