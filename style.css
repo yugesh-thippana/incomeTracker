@@ -4,7 +4,6 @@
     padding: 0;
     box-sizing: border-box;
 }
-
 .clearfix::after {
     content: "";
     display: table;
@@ -30,7 +29,7 @@ body {
 
 .top {
     height: 40vh;
-    background-image: url("https://miro.medium.com/max/3408/1*_q0eVHdpPEsFEZ7sA-mciA.png");
+    background-image: url("https://images.unsplash.com/photo-1455612693675-112974d4880b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1600&h=500&q=60");
     background-size: cover;
     background-position: center;
     position: relative;
@@ -48,7 +47,7 @@ body {
     display : flex;
     flex-direction : column;
     justify-content: space-around;
-    background-color: rgba(255, 255, 255, 0.2);
+    background-color: rgba(255, 255, 255, 0.226);
 }
 .budget:hover  .budget_title{
     color : black;
@@ -152,6 +151,13 @@ body {
 **********************************************/
 
 /***** FORM *****/
+
+.bottom{
+    
+    margin : 0 auto;
+    background-color: white;
+    min-height: 60vh;
+}
 .add {
     padding: 14px;
     border-bottom: 1px solid #e7e7e7;

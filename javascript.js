@@ -23,11 +23,15 @@ let budgetData = (function () {
         per : null,
         total : new Array(0,0,0)
     }
+    function calcPercentage(data){
+        if(data.total[0] == 0)
+            data.per = 1/0;
+            else
+            data.per = Math.round(((Math.abs(data.total[1]))/(data.total[0])) * 100)+ "%";
+    }
     // shortform for accessing eachBudget everytime in data;
     x = data.eachBudget;
-    return {
-        
-        
+    return {        
         // this function is called whenever new data need to be added (stored inside data object).
         storeData : function(id, desc, value){
             // making value positive so that if user enters negative value, it iincome doesnt go to expense.
@@ -62,18 +66,74 @@ let budgetData = (function () {
             else
             data.total[1] += data.eachBudget.budget[y];  
             data.total[2] += data.eachBudget.budget[y];   
-     
-            data.per = Math.round(((Math.abs(data.total[1]))/(data.total[0])) * 100)+ "%";
+            calcPercentage(data);
         },  
         // this function is used just to return the required data for the top.
         // we only want to return the neccessory information ( not the whole data ).
         returnStoreTopBudget : function (){
-            return {
+            return {                        
                 total : data.total[2],
                 income : data.total[0],
                 expense : data.total[1],
                 per : data.per
             };
+        },
+        DeleteBudget : function(type,Id){
+
+            let Data,i1,i2,x,y,budgetNum;
+            Data = {...data};
+            
+            // x = {...object}  is used to clone object into x
+            // x = [...array]   is used to clone array into x
+
+            if(type == "expense"){
+                signChange(); 
+                Data.Id.exp--;
+            }
+            else
+            Data.Id.inc--;
+
+            // avoid foreach method (doesnt work rn, google later)
+            i1 = 0; i2 = 0; x = 0;
+            for(y=0;y<Data.eachBudget.budget.length;y++){
+                i1++;
+                if(Data.eachBudget.budget[y]>0){
+                    i2++;
+                    if(i2==Id){
+                        budgetNum = data.eachBudget.budget[i1-1];
+                        Data.eachBudget.budget.splice(i1-1,1);
+                        Data.eachBudget.description.splice(i1-1,1);
+                        x = 1;
+                        break;
+                    }
+                }
+            }
+                        
+            if(type == "expense"){
+                signChange();
+                Data.total[1]+= budgetNum;
+
+            }
+            else
+            Data.total[0]-= budgetNum;
+            Data.total[2] = Data.total[0] + Data.total[1];
+            calcPercentage(Data);
+
+            data = {...Data};
+            console.log(data);
+
+            function signChange(){
+                let j;
+                for(j=0;j<Data.eachBudget.budget.length;j++){
+                    Data.eachBudget.budget[j] = -Data.eachBudget.budget[j];
+                } 
+        }
+        return {
+            total : data.total[2],
+            income : data.total[0],
+            expense : data.total[1],
+            per : data.per
+        }    
         },
         testing : function(){
             console.log(data);
@@ -111,14 +171,14 @@ let UI = (function () {
             if (y > 0){
                 
                 x = '<div class="item clearfix" id="income-' + data.Id.inc +
-                '"><div class="item_description">' + z +'</div><div class="right clearfix">' + 
+                '"><div class="item_description">' + data.Id.inc + ".&nbsp&nbsp&nbsp" + z +'</div><div class="right clearfix">' + 
                 '<div class="item_value">' + y + '</div><div class="item_delete"><button class="item_delete--btn">' +
                 '<i class="ion-ios-close-outline"></i></button></div></div></div>' ;
                 document.querySelector(".income_list").insertAdjacentHTML("beforeend", x) ;
             }
             else {
                 x = '<div class="item clearfix" id="expense-' + data.Id.exp +
-                '"><div class="item_description">' + z + '</div><div class="right clearfix"><div class="item_value">' + 
+                '"><div class="item_description">' + data.Id.exp + ".&nbsp&nbsp&nbsp" + z + '</div><div class="right clearfix"><div class="item_value">' + 
                 (-y) + '</div><div class="item_percentage">' + '21%' + '</div><div class="item_delete"><button class="item_delete--btn">' +
                 '<i class="ion-ios-close-outline"></i></button></div></div></div>' ;
                 document.querySelector(".expenses_list").insertAdjacentHTML("beforeend",x) ;
@@ -154,9 +214,16 @@ let UI = (function () {
             document.querySelector(".budget_income--value").innerHTML = budget.income;
             document.querySelector(".budget_expenses--value").innerHTML = budget.expense;
             document.querySelector(".budget_expenses--percentage").innerHTML = budget.per;
+        },
+        deleteUiItem : function(type,Id){
+            console.log(document.getElementById(type + "-" + Id));
+            // we cannot directly delete a node.get the parent node and delete the child node
+            // in removeChild function, whole node must be passed instead of just the string name.
+            // node is the complete DOM html of a desired element. (not just the html tag string)
+            document.getElementById(type + "-" + Id).parentNode.removeChild(document.getElementById(type + "-" + Id));
         }
     };
-
+        
 })();
 
 // controller controls everything
@@ -203,16 +270,20 @@ let controller = (function (){
         }
     }
     function deleteBudget(event){
-        let budget;
+        let budget,type,Id,updateTopBudget;
         budget = event.target.parentNode.parentNode.parentNode.parentNode.id;
         budget = budget.split("-");
         type = budget[0];
-        Id = budget[1];
+        Id = parseInt(budget[1]);
+        console.log(Id);
+        // remember Id is a string.
         if(!isNaN(Id)){
-            // delete the item from budget displayed in the bottom
-            
             // update our budget data 
+            updateTopBudget = budgetData.DeleteBudget(type,Id);
             // update the top budget
+            UI.printTopBudget(updateTopBudget);
+            // delete the item from budget displayed in the bottom
+            UI.deleteUiItem(type,Id);
             
         }
         
